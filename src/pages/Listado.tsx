@@ -1,6 +1,5 @@
 // src/pages/Listado.tsx
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 interface Element {
     id: string;
@@ -13,24 +12,34 @@ const Listado: React.FC = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('https://6172cfe5110a740017222e2b.mockapi.io/elements')
+        fetch('https://6172cfe5110a740017222e2b.mockapi.io/elements')
             .then((response) => {
-                setElements(response.data);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setElements(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error('Error al cargar los elementos:', error);
                 setLoading(false);
             });
     }, []);
 
     return (
-        <div>
-            <h2>Listado</h2>
+        <div className="container mx-auto p-4">
+            <h2 className="text-2xl font-bold mb-4">Listado</h2>
             {loading ? (
-                <p>Loading...</p>
+                <p className="text-gray-500">Loading...</p>
             ) : (
-                <ul>
+                <ul className="list-disc pl-5">
                     {elements.map(element => (
-                        <li key={element.id}>
-                            <img src={element.avatar} alt={element.name} width={40} height={40} />
-                            {element.name}
+                        <li key={element.id} className="flex items-center mb-2">
+                            <img className="rounded-full mr-3" src={element.avatar} alt={element.name} width={40} height={40} />
+                            <span>{element.name}</span>
                         </li>
                     ))}
                 </ul>

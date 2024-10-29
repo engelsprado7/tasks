@@ -16,12 +16,17 @@ const Tasks: React.FC = () => {
     };
 
     return (
-        <div>
-            <h2>Tasks</h2>
-            <button onClick={() => setShowModal(true)}>Agregar Nuevo Task</button>
-            <ul>
+        <div className="container mx-auto p-4">
+            <h2 className="text-2xl font-bold mb-4">Tasks</h2>
+            <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition mb-4"
+                onClick={() => setShowModal(true)}
+            >
+                Agregar Nuevo Task
+            </button>
+            <ul className="list-disc pl-5 mb-4">
                 {tasks.map(task => (
-                    <li key={task.id}>{task.description}</li>
+                    <li key={task.id} className="mb-2">{task.description}</li>
                 ))}
             </ul>
             {showModal && <TaskFormModal onAddTask={handleAddTask} onClose={() => setShowModal(false)} />}
